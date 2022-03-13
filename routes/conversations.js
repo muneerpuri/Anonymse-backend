@@ -50,6 +50,16 @@ router.put("/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//find single conversation
+router.get("/single/:id", async (req, res) => {
+  let Id = req.params.id;
+  try {
+    const conversation = await Conversation.findById(Id);
+    res.status(200).json(conversation);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // get conv includes two userId
 
