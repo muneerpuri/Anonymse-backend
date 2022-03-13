@@ -12,10 +12,16 @@ const conversationRoute = require("./routes/conversations");
 const messageRoute = require("./routes/messages");
 const router = express.Router();
 const path = require("path");
-var cors = require('cors')
-app.use(cors())
 dotenv.config();
-
+app.use((req,res,next)=>{
+  res.header("Access-Control-Allow-Origin","*")
+  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
+  if(req.method === 'OPTIONS'){
+      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
+      return res.status(200).json({})
+  }
+  next()
+})
 mongoose.connect(
   process.env.MONGO_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
