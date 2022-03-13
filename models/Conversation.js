@@ -8,6 +8,10 @@ const ConversationSchema = new mongoose.Schema(
     revealed: {
       type: Boolean,
       default: false
+    },
+    showRevealButton:{
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
