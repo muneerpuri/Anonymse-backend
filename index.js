@@ -12,9 +12,17 @@ const conversationRoute = require("./routes/conversations");
 const messageRoute = require("./routes/messages");
 const router = express.Router();
 const path = require("path");
-
-
-
+var cors = require('cors')
+const { createProxyMiddleware } = require('http-proxy-middleware');
+app.use('/api', createProxyMiddleware({ 
+    target: 'https://anonymse-frontend.vercel.app', //original url
+    changeOrigin: true, 
+    //secure: false,
+    onProxyRes: function (proxyRes, req, res) {
+       proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+    }
+}));
+app.use(cors());
 
 dotenv.config();
 mongoose.connect(
@@ -34,15 +42,15 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Origin","https://anonymse-frontend.vercel.app")
-  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
-  if(req.method === 'OPTIONS'){
-      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
-      return res.status(200).json({})
-  }
-  next()
-})
+// app.use((req,res,next)=>{
+//   res.header("Access-Control-Allow-Origin","https://anonymse-frontend.vercel.app")
+//   res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
+//   if(req.method === 'OPTIONS'){
+//       res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
+//       return res.status(200).json({})
+//   }
+//   next()
+// })
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
