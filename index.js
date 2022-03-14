@@ -14,16 +14,16 @@ const router = express.Router();
 const path = require("path");
 const cors = require("cors");
 
-app.use(cors());
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Origin","*")
-  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
-  if(req.method === 'OPTIONS'){
-      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
-      return res.status(200).json({})
-  }
-  next()
-})
+
+// app.use((req,res,next)=>{
+//   res.header("Access-Control-Allow-Origin","*")
+//   res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
+//   if(req.method === 'OPTIONS'){
+//       res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
+//       return res.status(200).json({})
+//   }
+//   next()
+// })
 dotenv.config();
 mongoose.connect(
   process.env.MONGO_URL,
@@ -32,6 +32,10 @@ mongoose.connect(
     console.log("Connected to MongoDB");
   }
 );
+
+app.use(cors());
+
+
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 //middleware
