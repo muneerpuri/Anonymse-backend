@@ -24,6 +24,7 @@ const cors = require("cors");
 //   }
 //   next()
 // })
+
 dotenv.config();
 mongoose.connect(
   process.env.MONGO_URL,
@@ -31,9 +32,8 @@ mongoose.connect(
   () => {
     console.log("Connected to MongoDB");
   }
-);
-
-app.use(cors());
+  );
+  
 
 
 app.use("/images", express.static(path.join(__dirname, "public/images")));
@@ -52,6 +52,7 @@ const storage = multer.diskStorage({
   },
 });
 
+app.use(cors());
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
