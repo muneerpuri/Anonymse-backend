@@ -13,6 +13,7 @@ const messageRoute = require("./routes/messages");
 const router = express.Router();
 const path = require("path");
 var cors = require('cors')
+app.use(cors());
 const { createProxyMiddleware } = require('http-proxy-middleware');
 app.use('/api', createProxyMiddleware({ 
     target: 'https://anonymse-frontend.vercel.app', //original url
@@ -22,7 +23,6 @@ app.use('/api', createProxyMiddleware({
        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
     }
 }));
-app.use(cors());
 
 dotenv.config();
 mongoose.connect(
