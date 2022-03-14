@@ -12,18 +12,9 @@ const conversationRoute = require("./routes/conversations");
 const messageRoute = require("./routes/messages");
 const router = express.Router();
 const path = require("path");
-const cors = require("cors");
 
 
-// app.use((req,res,next)=>{
-//   res.header("Access-Control-Allow-Origin","*")
-//   res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
-//   if(req.method === 'OPTIONS'){
-//       res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
-//       return res.status(200).json({})
-//   }
-//   next()
-// })
+
 
 dotenv.config();
 mongoose.connect(
@@ -43,6 +34,16 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
+app.use((req,res,next)=>{
+  res.header("Access-Control-Allow-Origin","*")
+  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization")
+  if(req.method === 'OPTIONS'){
+      res.header('Access-Control-Allow-Methods','PUT, POST, PATCH, GET, DELETE')
+      return res.status(200).json({})
+  }
+  next()
+})
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images");
@@ -52,7 +53,6 @@ const storage = multer.diskStorage({
   },
 });
 
-app.use(cors());
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
