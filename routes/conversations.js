@@ -60,6 +60,19 @@ router.get("/single/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//delete conversation and send all conversations back
+router.delete("/single/:id/:userId", async (req, res) => {
+  let Id = req.params.id;
+  try {
+    const conversation = await Conversation.findByIdAndDelete(Id);
+    const conversations = await Conversation.find({
+      members: { $in: [req.params.userId] },
+    });
+    res.status(200).json(conversations);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // get conv includes two userId
 
